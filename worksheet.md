@@ -1,87 +1,94 @@
-# Getting started with physical computing
+# 物理计算入门
 
-## GPIO pins
+## GPIO 引脚
 
-One powerful feature of the Raspberry Pi is the row of GPIO pins along the top edge of the board. GPIO stands for General-Purpose Input/Output. These pins are a physical interface between the Raspberry Pi and the outside world. At the simplest level, you can think of them as switches that you can turn on or off (input) or that the Pi can turn on or off (output).
+7树莓派强大的特性之一的呢就是板子上面边缘的两行GPIO引脚。GPIO是通用输入输出的缩写。这些针脚是树莓派与外部世界的物理接口。最简单的说就是你可以把这些针脚当做你能够打开或者关闭的用来输入的开关或者Pi本身可以打开关闭的输出开关。
 
-The GPIO pins allow the Raspberry Pi to control and monitor the outside world by being connected to electronic circuits. The Pi is able to control LEDs, turning them on or off, run motors, and many other things. It's also able to detect whether a switch has been pressed, the temperature, and light. We refer to this as physical computing.
 
-There are 40 pins on the Raspberry Pi (26 pins on early models), and they provide various different functions.
+GPIO引脚使得树莓派通过连接电路来控制和检测外部世界。树莓派能够控制多个LED灯，控制lED灯的打开关闭，运行电机，以及其他的事情。还能够检测一个按钮是否被按下，检测温度和光照强度。我们把这些操作称之为物理计算。
 
-If you have a RasPiO pin label, it can help to identify what each pin is used for. Make sure your pin label is placed with the keyring hole facing the USB ports, pointed outwards.
+
+树莓派有40个引脚(早期版本有26个引脚)，提供了多种多样的功能。
+
+如果你有一个树莓派引脚标签RasPiO，能够帮助你明确每个针脚的用途。确保面对USB接口的时候你的针脚标签的孔是在外侧的。
+
 
 ![](images/raspio-ports.jpg)
 
-If you don't have a pin label, then this guide can help you to identify the pin numbers:
+如果你没有引脚标签的话，下面的示意图可以帮助你确定引脚编号
 
 ![](images/pinout.png)
 
-You'll see pins labelled as 3V3, 5V, GND and GP2, GP3, etc:
+你可以看到引脚有3V3，5V，GND，GP2，GP3等标签：
+
 
 |   |   |   |
 |---|---|---|
-| 3V3 | 3.3 volts | Anything connected to these pins will always get 3.3V of power |
-| 5V | 5 volts | Anything connected to these pins will always get 5V of power |
-| GND | ground | Zero volts, used to complete a circuit |
-| GP2 | GPIO pin 2 | These pins are for general-purpose use and can be configured as input or output pins |
-| ID_SC/ID_SD/DNC | Special purpose pins ||
+| 3V3 | 3.3V | 链接到这个引脚可以得到3.3V电压 |
+| 5V | 5V | 连接到这个引脚可以得到5V电压 |
+| GND | 接地 | 0V接地用来完成电路 |
+| GP2 | GPIO 针脚 2 | 这些针脚是通用针脚，可以配置为输入或者输出针脚 |
+| ID_SC/ID_SD/DNC | 特殊用途引脚
+ ||
 
-**WARNING**: If you follow the instructions, then playing about with the GPIO pins is safe and fun. Randomly plugging wires and power sources into your Pi, however, may destroy it, especially if using the 5V pins. Bad things can also happen if you try to connect things to your Pi that use a lot of power; LEDs are fine, motors are not. If you're worried about this, then you might want to consider using an add-on board such as the [Explorer HAT](https://shop.pimoroni.com/products/explorer-hat) until you're confident enough to use the GPIO directly.
+**警告**: 如果你严格按照本文教程来，玩耍GPIO引脚将会是一个好玩并且有趣的过程。但是如果你随便连接电线，可能会毁掉树莓派，尤其是你使用5V引脚的时候。当你把大负载的元件连接到树莓派的时候可能会发生不愉快的事情，LED灯是没有问题的，电机可能会有问题。如果你担心损坏树莓派，可以考虑使用诸如[Explorer HAT](https://shop.pimoroni.com/products/explorer-hat)扩展板，直到你能够自信的熟练直接使用GPIO。这个扩展板有电路保护功能防止烧毁树莓派。也可以利用检测开关功能做一个电流急急棒。
 
-## Lighting an LED
+## 点亮LED灯
 
-LEDs are delicate little things. If you put too much current through them they will pop (sometimes quite spectacularly). To limit the current going through the LED, you should always use a resistor in series with it.
+LED等是很容易被烧坏的小元件。如果电流过大就会炸裂，有时候会让你大吃一惊。为了限制流经LED的电流，你应该在电路里串联一个电阻。突然想到很想买PM2.5传感器和甲醛传感器。
 
-Try connecting the long leg of an LED to the Pi's 3V3 and the short leg to a GND pin. The resistor can be anything over about 50Ω.
+把LED灯长的针脚接到3V3这个引脚，然后把短针脚接到GND引脚。电阻可以是大于50Ω的任意电阻。
 
 ![](images/led-3v3.png)
 
-The LED should light up. It will always be on, because it's connected to a 3V3 pin, which is itself always on.
+这样的话LED就会亮起来，会一直亮，因为LED灯链接的3V3接口会一直是打开的。
 
-Now try moving it from 3V3 to GPIO pin 17:
 
+现在尝试把LED灯长的针脚从3V3接口重新连接到17号GPIO引脚。
 ![](images/led-gpio17.png)
 
-The LED should now turn off, but now it's on a GPIO pin, and can therefore be controlled by code.
+LED灯现在就灭了，因为现在连接到了可以用代码控制通断的GPIO接口
 
-## Switching an LED on and off
+## 控制LED亮暗
 
-GPIO Zero is a new Python library which provides a simple interface to everyday GPIO components. It comes installed by default in Raspbian.
+>Pi Zero比Arduino便宜，所以以后中学阶段可以用Pi Zero做机器人。
 
-1. Open IDLE from the main menu (`Menu`>`Programming`>`Python 3 (IDLE)`.
+GPIO Zero是一个让我们可以用一种简单的方式来控制常见的GPIO元件的新的Python代码库。Raspbian默认安装了GPIO Zero代码库。
 
-1. You can switch an LED on and off by typing commands directly into the Python interpreter window (also known as the Python **shell**). Let's do this by first importing the GPIO Zero library. You also need to tell the Pi which GPIO pin you are using - in this case pin 17. Next to the chevrons `>>>`, type:
+1. 从主菜单打开IDLE(`菜单`>`编程`>`Python 3 (IDLE)`.
 
-	```python
+1.你可以通过直接在Python解释器里输入命令来控制LED的亮暗。(或者说Python **shell**). Let's do this by first importing the GPIO Zero library.在控制LED等之前首先导入GPIO Zero库。你还需要告诉树莓派你正在用哪个针脚-这个例子用的是17号针脚。紧接着大于号 `>>>`, 输入
+    
+    ```python
 	from gpiozero import LED
 	led = LED(17)
 
 	```
-	Press **Enter** on the keyboard.
+	敲 **回车**.
 
-1. To make the LED switch on, type the following and press **Enter**:
+1. 为了让LED亮起来，输入下面代码并敲 **Enter**:
 
 	```python
 	led.on()
 	```
 
-1. To make it switch off you can type:
+1. 让LED灭可以输入:
 
 	```python
 	led.off()
 	```
 
-1. Your LED should switch on and then off again. But that's not all you can do.
+1. Your LED should switch on and then off again. But that's not all you can do.LED就会先亮后灭，但是你能做的不止于此。
 
-## Flashing an LED
+## 让LED闪烁
 
-With the help of the `time` library and a little loop, you can make the LED flash.	
+通过使用`time`库，和一个简单的循环，我们可以让LED不断闪烁。	
 
-1. Create a new file by clicking **File > New file**.
+1. 单击 **文件 > 新建文件**创建新的Python文件.
 
-1. Save the new file by clicking **File > Save**. Save the file as `gpio_led.py`.
+1. 单击 **文件 > 保存**保存文件为`gpio_led.py`.
 
-1. Enter the following code to get started:
+1. 输入以下代码:
 
     ```python
     from gpiozero import LED
@@ -96,47 +103,48 @@ With the help of the `time` library and a little loop, you can make the LED flas
         sleep(1)
     ```
 
-1. Save with **Ctrl + S** and run the code with **F5**.
+1. 按 **Ctrl + S** 保存文件并按 **F5** 执行代码.
 
-1. The LED should be flashing on and off. To exit the program press **Ctrl + C** on your keyboard.
+1. LED灯开始闪烁. 按 **Ctrl + C** 退出程序.
 
-## Using buttons to get input
+## 利用按钮获取输入
 
-Now you're able to control an output component (an LED), let's connect and control an input component: a button. 
+现在你可以控制输出元件(一个LED)，现在让我们连接并控制一个输入元件：按钮。
 
-1. Connect a button to another GND pin and GPIO pin 2, like this:
+
+1. 按图把一个按钮连接到另外一个GND引脚和2号GPIO引脚:
 
     ![](images/button.png)
 
-1. Create a new file by clicking **File > New file**.
+1. 点击 **File > New file**新建文件.
 
-1. Save the new file by clicking **File > Save**. Save the file as `gpio_button.py`.
+1. 点击 **File > Save**. 把新建文件保存为 `gpio_button.py`.
 
-1. This time you'll need the `Button` class, and to tell it that the button is on pin 2. Write the following code in your new file:
+1. 现在你需要使用`Button`类，并且告诉该类按钮连接到了2号引脚。输入以下代码到你新建的文件：
 
 	```python
 	from gpiozero import Button
 	button = Button(2)
 	```
 
-1. Now you can get your program to do something when the button is pushed. Add these lines:
+1. 现在当按钮按下的时候你的程序就可以做一些事情。添加以下代码:
 
 	```python
 	button.wait_for_press()
-	print('You pushed me')
+	print('你按我了')
 	```
-1. Save with **Ctrl + S** and run the code with **F5**. 
-1. Press the button and your text will appear. 
+1. 按 **Ctrl + S** 保存代码并按 **F5**执行代码. 
+1. 单击按钮文本就会出现. 
 
-## Manually controlling the LED
+## 手动控制LED
 
-You can now combine your two programs written so far to control the LED using the button.
+You can now combine your two programs written so far to control the LED using the button.现在可以目前为止写的两个程序结合起来通过按钮来控制LED。
 
-1. Create a new file by clicking **File > New file**.
+1. 单击 **File > New file**新建文件.
 
-1. Save the new file by clicking **File > Save**. Save the file as `gpio_control.py`.
+1. 单击 **File > Save**保存文件为 `gpio_control.py`.
 
-1. Now write the following code:
+1. 输入以下代码:
 
     ```python
     from gpiozero import LED, Button
@@ -151,13 +159,13 @@ You can now combine your two programs written so far to control the LED using th
     led.off()
     ```
 	
-1. Save and run your program. When you push the button the LED should come on for three seconds.
+1. 保存并运行程序。当你按按钮的时候LED持续亮3秒然后灭掉。
 
-## Making a switch
+## 制作一个开关
 
-With a switch, a single press and release on the button would turn the LED on, and another press and release would turn it off again.
+通过开关，按下和松开按钮一次就会点亮LED，再次按下和松开就会关掉LED。
 
-1. Modify your code so that it looks like this:
+1. 修改程序如下:
 
 	```python
 	from gpiozero import LED, Button
@@ -171,11 +179,12 @@ With a switch, a single press and release on the button would turn the LED on, a
 		led.toggle()
 	```
 
-    `led.toggle()` switches the state of the LED from on to off, or off to on. Since this happens in a loop the LED with turn on and off each time the button is pressed.
+    `led.toggle()` 把LED的状态从亮改为灭，从灭改为亮。因为在循环内调用函数，所以每次按按钮的是LED就会点亮或者关闭。
 
-1. It would be great if you could make the LED switch on only when the button is being held down. With GPIO Zero, that's easy. There are two methods of the `Button` class called `when_pressed` and `when_released`. These don't block the flow of the program, so if they are placed in a loop, the program will continue to cycle indefinitely.
+1. These don't block the flow of the program, so if they are placed in a loop, the program will continue to cycle indefinitely.
+如果只有按钮按下的是LED才会亮是一个很好的注意。因为有了GPIO Zero这个变得很简单。`Button`类有两个方法分别是`when_pressed` and `when_released`。这两个方法不会阻塞程序的流程，所以即便你把这两个函数放到一个循环里，程序仍然会无限循环。
 
-1. Modify your code to look like this:
+1. 修改代码如下:
 
     ```python
     from gpiozero import LED, Button
@@ -190,16 +199,18 @@ With a switch, a single press and release on the button would turn the LED on, a
     pause()
     ```
 
-1. Save and run the program. Now when the button is pressed, the LED will light up. It will turn off again when the button is released.
+>这种写法很明显比用Arduino要容易的多，电路也简单的多，充分的体现了Python语言简洁优雅，开发效率高的特点
 
-## What next?
+1. Save and run the program. Now when the button is pressed, the LED will light up. It will turn off again when the button is released.保持并运行程序，现在按下按钮，LED亮；松开按钮，LED灭。
 
-There are lots of other things you can control or monitor with your Raspberry Pi. Have a look at the worksheets below, to see how easily this can be done.
+## 接下来学习啥?
 
-- [Using an active buzzer](buzzer.md)  
-- [Making traffic lights](trafficlights.md)  
-- [Using a light-dependent resistor](ldr.md)  
-- [Using a PIR Sensor](pir.md)  
-- [Using an ultrasonic distance sensor](distance.md)
-- [Analogue inputs](analogue.md)
-- [Using motors](motors.md)
+通过树莓派你可以控制和监测大量其他的元件。看看下面的列表，就会明白这很容易。
+
+- [控制蜂鸣器](buzzer.md)  
+- [制作交通灯](trafficlights.md)  
+- [光敏电阻的使用](ldr.md)  
+- [人体红外传感器的使用](pir.md)  
+- [超声波距离传感器的使用](distance.md)
+- [模拟输入](analogue.md)
+- [使用电机](motors.md)

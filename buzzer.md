@@ -1,31 +1,31 @@
-# Buzzers
+# 蜂鸣器
 
-There are two main types of buzzer: *active* and *passive*.
+蜂鸣器有两种: *有源蜂鸣器* and *无源蜂鸣器*。
+ The *active* buzzers are a lot simpler to use, so these are covered here.
+*无源蜂鸣器*输入电压就会发声。需要特定的信号来产生多样的音调。*有源蜂鸣器*更容易使用，介绍如下。
 
-A *passive* buzzer emits a tone when a voltage is applied across it. It also requires a specific signal to generate a variety of tones. The *active* buzzers are a lot simpler to use, so these are covered here.
+## 连接蜂鸣器
 
-## Connecting a buzzer
+有源蜂鸣器用起来就像LED一样，但是有源蜂鸣器更加稳健，不需要串联电阻来保护有源蜂鸣器：
 
-An *active* buzzer can be connected just like an LED, but as they are a little more robust, you won't be needing a resistor to protect them.
-
-Set up the circuit as shown below:
+按照下图连接电路:
 
 ![buzzer](images/buzzer-circuit.png)
 
-1. Add `Buzzer` to the `from gpiozero import...` line:
+1. 导入 `Buzzer` to the `from gpiozero import...` 类:
 
     ```python
     from gpiozero import Buzzer
 	from time import sleep
     ```
 
-1. Add a line below your creation of `button` and `lights` to add a `Buzzer` object:
+1. 在你创建按钮和灯后面添加`Buzzer`对象。:
 
     ```python
     buzzer = Buzzer(17)
     ```
 
-1. In GPIO Zero, a `Buzzer` works exactly like an `LED`, so try adding a `buzzer.on()` and `buzzer.off()` into your loop:
+1. 在GPIO Zero库中，`Buzzer`就像一个`LED`，在循环中试着添加`buzzer.on()` and `buzzer.off()`:
 
     ```python
     while True:
@@ -36,13 +36,13 @@ Set up the circuit as shown below:
 
     ```
 
-1. A `Buzzer` has a `beep()` method which works like an `LED`'s `blink`. Try it out:
+1. A `Buzzer` has a `beep()` method which works like an `LED`'s `blink`. `Buzzer`类有一个方法`beep()`类似于`LED`的`blink`。试试看:
 
     ```python
     while True:
         buzzer.beep()
     ```
 
-## What Next?
+## 拓展延伸?
 
-- Continue to the next worksheet on building a [traffic lights](trafficlights.md) system using GPIO Zero.
+- 到下一个学习单学习用GPIO Zero打造[交通灯](trafficlights.md) 系统.
